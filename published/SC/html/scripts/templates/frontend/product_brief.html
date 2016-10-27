@@ -1,0 +1,128 @@
+{strip}
+{*{if $products_to_show[i1] ne NULL}*}
+    {*{if $products_to_show[i1].slug}*}
+        {*{assign var=_product_url value="?ukey=product&productID=`$products_to_show[i1].productID`&product_slug=`$products_to_show[i1].slug`"|set_query_html}*}
+    {*{else}*}
+        {*{assign var=_product_url value="?ukey=product&productID=`$products_to_show[i1].productID`"|set_query_html}*}
+    {*{/if}*}
+    {*{if $widget}{assign var=_form_action_url value="&view=noframe&external=1"}{/if}*}
+    {*{assign var=_cnt value=$products_to_show[i1].productID}*}
+    {*<table class='cs_product_info'>*}
+        {*<tbody>*}
+        {*<tr>*}
+            <td width=160>
+                {if $products_to_show[i1].pics_for_slider > 0}
+                    <div class="slider visual">
+                        <div class=controls>
+                            <div class="label prev_pic" onclick="changePic('{$products_to_show[i1].code_1c}',-1)"></div>
+                            <div class="label next_pic" onclick="changePic('{$products_to_show[i1].code_1c}', 1)"></div>
+                        </div>
+                        <img id='pic{$products_to_show[i1].code_1c}' class='preview' width=160 height=120 data-pid='{$smarty.const.URL_PRODUCTS_PICTURES}/{$products_to_show[i1].picture|escape:'url'}' data-pics='{$products_to_show[i1].pics_for_slider}' data-current=0 src="{$smarty.const.URL_PRODUCTS_PICTURES}/{$products_to_show[i1].thumbnail|escape:'url'}">
+                        <div class="corner color
+                                        {if $products_to_show[i1].akcia}
+                                             _akcia"><span></span>Акция{if $products_to_show[i1].akcia_skidka > 0} - {$products_to_show[i1].akcia_skidka}%{/if}
+                            {*{elseif $products_to_show[i1].eproduct_available_days > 5}
+                            _superprice"><span></span>Суперцена!*}
+                            {elseif $products_to_show[i1].new}
+                            _newitem"><span></span>Новинка!
+                            {elseif $products_to_show[i1].sort_order}
+                            _newitemspostup"><span></span>Новое поступление
+                            {elseif $products_to_show[i1].items_sold}
+                            _hit"><span></span>Хит продаж
+                            {else}
+                            ">
+                            {/if}
+                        </div>
+                    </div>
+                {else}
+                    <div class="visual">
+                        <a {$target} href='{$_product_url}'>
+                            {if $products_to_show[i1].thumbnail}
+                                <img class='preview' width=160 height=120 data-pid='{$smarty.const.URL_PRODUCTS_PICTURES}/{$products_to_show[i1].picture|escape:'url'}' src="{$smarty.const.URL_PRODUCTS_PICTURES}/{$products_to_show[i1].thumbnail|escape:'url'}" alt="{$products_to_show[i1].name|escape:'html'}" title="{$products_to_show[i1].name|escape:'html'}">
+                            {else}
+                                <img width=153 height=117 src='/img/nophoto.jpg'>
+                            {/if}
+                        </a>
+                        <div class="corner color
+                                        {if $products_to_show[i1].akcia}
+                                             _akcia"><span></span>Акция{if $products_to_show[i1].akcia_skidka > 0} - {$products_to_show[i1].akcia_skidka}%{/if}
+                            {*{elseif $products_to_show[i1].eproduct_available_days > 5}
+                            _superprice"><span></span>Суперцена!*}
+                            {elseif $products_to_show[i1].new}
+                            _newitem"><span></span>Новинка!
+                            {elseif $products_to_show[i1].sort_order}
+                            _newitemspostup"><span></span>Новое поступление
+                            {elseif $products_to_show[i1].items_sold}
+                            _hit"><span></span>Хит продаж
+                            {else}
+                            ">
+                            {/if}
+                        </div>
+                    </div>
+                {/if}
+            </td>
+            <td>
+                <div class='productname'>
+                    {*{if $products_to_show[i1].akcia}*}
+                    {*...осталось <div class="future_date"></div>*}
+                    {*{/if}*}
+                    <a href='{$_product_url}'>{$products_to_show[i1].name|escape:'html'}</a>
+                </div>
+            </td>
+            <td width=100>
+                <a href='{$_product_url}'>{$products_to_show[i1].product_code|escape:'html'}</a>
+            </td>
+            <td width=60>
+                {if $products_to_show[i1].Bonus/$products_to_show[i1].Price>2}
+                    <div style='color: red; font-size: 14px;'><b>{$products_to_show[i1].Bonus|string_format:"%d"}</b></div>
+                {else}
+                    <div class="totalPrice bonus">{$products_to_show[i1].Bonus|string_format:"%d"}</div>
+                {/if}
+            </td>
+            {*if $products_to_show[i1].zakaz}
+            <td width='80px'>
+                <div>
+                    <span style='color: red;font-size: 12px;'><i>под заказ!</i></span><br /><span style='color: grey;'><b>{$products_to_show[i1].PriceWithUnit}</b></span>
+                </div>
+            </td>*}
+            {if $products_to_show[i1].akcia && $products_to_show[i1].list_price}
+                    <td width=80>
+                <div class='akcia'>
+                    {if $smarty.const.CONF_SHOW_ADD2CART eq 1}
+                        {$products_to_show[i1].PriceWithUnit}<br /><span class='list_price'>{$products_to_show[i1].list_priceWithUnit}</span>
+                    {/if}
+                </div>
+                    </td>
+            {else}
+                    <td width=80>
+                {*{if $smarty.const.CONF_SHOW_ADD2CART eq 1}*}
+                <div class="price">{$products_to_show[i1].PriceWithUnit}</div>
+                {*{/if}*}
+                    </td>
+            {/if}
+            <td>
+            </td>
+            <td width=175>
+                {if $currencies_count ne 0 && $products_to_show[i1].Price > 0}
+                    {*<div class="pravay_chast">*}
+                    {*cpt_product_add2cart_button request_product_count='request_product_count' overridestyle=':qa8pav'*}
+                    {if $products_to_show[i1].ordering_available && $products_to_show[i1].Price>0 && ( $smarty.const.CONF_SHOW_ADD2CART eq 1 ) && ( $smarty.const.CONF_CHECKSTOCK==0 || $products_to_show[i1].in_stock > 0 ) }
+                        {cpt_product_add2cart_button}
+                    {elseif $smarty.const.CONF_SHOW_ADD2CART eq 1 && $smarty.const.CONF_CHECKSTOCK && !$products_to_show[i1].in_stock && $products_to_show[i1].ordering_available}
+                        <div class="prd_out_of_stock">{lbl_prd_out_of_stock}</div>
+                    {/if}
+                    {*</div>*}
+                {/if}
+            </td>
+        {*</tr>*}
+        {*</tbody>*}
+    {*</table>*}
+    {*<div class='delimiter'></div>*}
+    {*{if $products_to_show[i1].ordering_available && $products_to_show[i1].Price>0 && ( $smarty.const.CONF_SHOW_ADD2CART eq 1 ) && ( $smarty.const.CONF_CHECKSTOCK==0 || $products_to_show[i1].in_stock > 0 ) }*}
+    {*{elseif $smarty.const.CONF_SHOW_ADD2CART eq 1 && $smarty.const.CONF_CHECKSTOCK && !$products_to_show[i1].in_stock && $products_to_show[i1].ordering_available}*}
+        {*<div class="prd_out_of_stock">{lbl_prd_out_of_stock}</div>*}
+    {*{/if}*}
+{*{/if}*}
+{*</td>*}
+{*</tr>*}
+{/strip}

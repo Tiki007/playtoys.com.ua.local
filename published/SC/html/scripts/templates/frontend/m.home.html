@@ -1,0 +1,35 @@
+{zakcia}
+
+{get_topproducts var=akcia limit=30}
+
+<nav class="nav-wrapper" role="navigation">
+    <div class="nav-group">
+        <div class="nav-header">Информация</div>
+        <div class="nav-list">
+            <div class="nav-item">
+                <a href="/auxpage_1">О нас</a>
+            </div>
+            <div class="nav-item">
+                <a href="/auxpage_2">Сотрудничество</a>
+            </div>
+            <div class="nav-item">
+                <a href="/auxpage_bonus-programm">Бонусная программа</a>
+            </div>
+            <div class="nav-item">
+                <a href="/auxpage_contacts">Контакты</a>
+            </div>
+            <div class="nav-item">
+                <a href="/news">Новости</a>
+            </div>
+            <div class="nav-item">
+                <a href="/auxpage_zamena-braka">Замена брака</a>
+            </div>
+        </div>
+    </div>
+</nav>
+{if $akcia}
+    {include file="product_top.html" top=$akcia str='str_akcia_items'}
+{else}
+    {get_topproducts var=items_sold limit=30}
+    {include file="product_top.html" top=$items_sold str='str_items_sold_items'}
+{/if}

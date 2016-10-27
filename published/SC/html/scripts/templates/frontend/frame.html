@@ -1,0 +1,26 @@
+{if $ajax}
+    {if $smarty.session.log && $smarty.session.cs_may_order}
+        {cpt_maincontent}
+    {*{else}*}
+        {*<script>window.location.reload(true);</script>*}
+    {/if}
+{else}
+<!DOCTYPE html>
+<html lang=ru>
+<head>
+{include file="head.html"}
+</head>
+<body id="qwe" {*$GOOGLE_ANALYTICS_SET_TRANS*}{if $main_body_style} {$main_body_style}{/if}{if $PAGE_VIEW eq 'printable'} style="background-color:#FFFFFF;background-image:none;"{/if}{if $page_not_found404} class="body-page-404"{/if}>
+{if $page_not_found404}
+    {include file="404.html"}
+{elseif $market_link}
+    {include file="market.html"}
+{elseif $PAGE_VIEW eq 'mobile'}
+    {include file="m.index.html"}
+{else}
+    {include file="index.html"}
+{/if}
+</body>
+</html>
+{/if}
+{*{/strip}*}

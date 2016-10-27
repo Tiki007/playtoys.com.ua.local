@@ -1,0 +1,68 @@
+{$MessageBlock}
+
+<div>
+    {if ($orderSum.shipping_name && $orderSum.shipping_name ne "-") || ($orderSum.payment_name && $orderSum.payment_name ne "-")}
+            {if $orderSum.shipping_name && $orderSum.shipping_name ne "-"}
+                <div class=delivery>
+                    {lbl_shipping}
+                    ({$orderSum.shipping_name|escape:'html'}{if $orderSum.shippingServiceInfo} - {$orderSum.shippingServiceInfo|escape:'html'}{/if}):
+                    <p>{$orderSum.shippingAddress->getHTMLString()}</p>
+                </div>
+            {/if}
+            {*{if $orderSum.payment_name && $orderSum.payment_name ne "-"}*}
+                {*<td>*}
+                    {*{lbl_payment} (<strong>{$orderSum.payment_name|escape:'html'}</strong>):*}
+                    {*<p><strong>{$orderSum.billingAddress->getHTMLString()}</strong></p>*}
+                {*</td>*}
+            {*{/if}*}
+    {/if}
+
+            <div id="cart_content_tbl">
+                <div id="cart_content_header">
+                    <div>&nbsp;</div>
+                    {*{if $smarty.const.CONF_ENABLE_PRODUCT_SKU}*}
+                    {*<td style='text-align:center'>Артикул</td>*}
+                    {*{/if}*}
+                    <div>Наименование</div>
+                    <div>{"cart_product_quantity"|translate}</div>
+                    {*<div>{"ordr_itemprice_excluding_tax"|translate}</div>*}
+                    <div>Стоимость</div>
+                </div>
+                
+                {section name=i loop=$orderSum.sumOrderContent}
+                    <div class='row_{cycle values="odd,even"} order_item'>
+                        <div>{if $orderSum.sumOrderContent[i].thumbnail_url}<img
+                                src="{$orderSum.sumOrderContent[i].thumbnail_url|escape:'html'}"
+                                {*width="{$orderSum.sumOrderContent[i].thumbnail_width}"*}
+                                alt="{$orderSum.sumOrderContent[i].name|escape:'html'}" />{else}&nbsp;{/if}
+                        </div>
+                        <div>{$orderSum.sumOrderContent[i].name|escape:'html'}{if $orderSum.sumOrderContent[i].product_code} (арт.: {$orderSum.sumOrderContent[i].product_code|escape:'html'}){/if}</div>
+                        <div>{$orderSum.sumOrderContent[i].quantity}</div>
+                        <div>{$orderSum.sumOrderContent[i].cost}</div>
+                    </div>
+                {/section}
+
+                <div>
+                    <div id="cart_total_label">{"str_total"|translate}</div>
+                    <div id="cart_total">{$orderSum.total}</div>
+                </div>
+            </div>
+            
+            <form id=order_submit action="{''|set_query_html}" name='MainForm' method="POST">
+                <input type="hidden" name='totalUC' value='{$totalUC}'/>
+                <input name="action" value="process_order" type="hidden"/>
+                {if $orderSum.payment_form_html}
+                    <div class="background1">{$orderSum.payment_form_html}</div>
+                {/if}
+                <div>
+                    <label for=order_comment>{"checkout_comment"|translate}:</label>
+                    <textarea name="order_comment" id=order_comment{*cols="70"*} rows="4"></textarea>
+                </div>
+
+<input type="submit" class="checkout_buttons blue-button check" id="checkout_button"
+                              name="submit" value="{"checkout_place_order"|translate}"
+                              onclick="disable_button();">
+            
+            </form>
+
+</div>

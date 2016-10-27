@@ -1,0 +1,40 @@
+{strip}
+<table width=175>
+    <tbody>
+    <tr>
+        <td>
+            <div class=counter>
+                <button class='count-control control-up' type='button' onclick='increaseNumber({$products_to_show[i1].productID})'></button>
+                <input id='qty{$products_to_show[i1].productID}' class=cart_product_quantity type=text value=1 name=product_qty title='Количество' size=2 data-id='{$products_to_show[i1].productID}' onkeyup='if (event.keyCode == 13) {ldelim}add2Cart("#qty{$products_to_show[i1].productID}");{rdelim}'>
+                <button class='count-control control-down' type='button' onclick='decreaseNumber({$products_to_show[i1].productID})'></button>
+            </div>
+            {*<input name="product_qty" id='qty{$products_to_show[i1].productID}' class="cart_product_quantity" data-id='{$products_to_show[i1].productID}' type="text" size="2" value="" title='Количество'*}
+            {*onkeypress='if (event.keyCode == 13){literal}{add2Cart("#qty{/literal}{$products_to_show[i1].productID}{literal}");}{/literal}'>&nbsp;*}
+        </td>
+        <td style='vertical-align:middle;white-space:nowrap;'>
+            <div class="ostatok_div">
+                {if $products_to_show[i1].ostatok eq 'под заказ'}
+                    <span style='  color: red; font-style: italic;'>&nbsp;под&nbsp;заказ!</span>
+                {else}
+                    &nbsp;{$products_to_show[i1].ostatok}&nbsp;шт.
+                {/if}
+            </div>
+        </td>
+        <td>
+        <td style='vertical-align:middle;'>
+            <button class="z_add_cart" onclick='add2Cart("#qty{$products_to_show[i1].productID}");' type="button">
+                <div id="zpid_{$products_to_show[i1].productID}" class='in_cart'>
+                    <div class="animated zoomInDown">
+                        {if $shop_counts[$_cnt]}
+                            {$shop_counts[$_cnt]}
+                        {else}
+                            0
+                        {/if}
+                    </div>
+                </div>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+{/strip}

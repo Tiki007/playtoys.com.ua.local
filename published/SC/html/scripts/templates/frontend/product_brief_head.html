@@ -1,0 +1,46 @@
+<div class=shapka>
+    <table class=cs_product_info style="padding-left: 5px">
+        <tbody>
+        <tr>
+            <td>
+                <div class="{if $sort=='name'} z_sort_active {else} z_sort_inactive {/if}">
+                    <div class="arbopr sort_name">
+                        <a href="/category/{$selected_category.slug}&sort=name&direction={if $direction=='ASC'}DESC{else}ASC{/if}"  title="Отсортировать по Наименованию">Наименование</a>
+                    </div>
+                    <div class="{if $direction=='ASC'&&$sort=='name'}z_sort_asc{else}z_sort_desc{/if}"></div>
+                </div>
+            </td>
+            <td width=100px>
+                <div class="{if $sort=='product_code'} z_sort_active {else} z_sort_inactive {/if}">
+                    <div class=arbopr>
+                        <a href="/category/{$selected_category.slug}&sort=product_code&direction={if $direction=='ASC'}DESC{else}ASC{/if}" title="Отсортировать по Артикулу">Артикул</a>
+                    </div>
+                    <div class="{if $direction=='ASC'&&$sort=='product_code'}z_sort_asc{else}z_sort_desc{/if}"></div>
+                </div>
+            </td>
+            <td width=60px>
+                <div class="{if $sort=='Bonus'} z_sort_active {else} z_sort_inactive {/if}">
+                    <div class=arbopr>
+                        <a href="/category/{$selected_category.slug}&sort=Bonus&direction={if $direction=='ASC'}DESC{else}ASC{/if}" title="Отсортировать по Баллам">Баллы</a>
+                    </div>
+                    <div class="{if $direction=='ASC'&&$sort=='Bonus'}z_sort_asc{else}z_sort_desc{/if}"></div>
+                </div>
+            </td>
+            <td width=80px>
+                <div class="{if $sort=='Price'} z_sort_active {else} z_sort_inactive {/if}">
+                    <div class=arbopr>
+                        <a href="/category/{$selected_category.slug}&sort=Price&direction={if $direction=='ASC'}DESC{else}ASC{/if}" title="Отсортировать по Цене">Цена</a>
+                    </div>
+                    <div class="{if $direction=='ASC'&&$sort=='Price'}z_sort_asc{else}z_sort_desc{/if}"></div>
+                </div>
+            </td>
+            <td width=110px>
+                <div class=ost>Остаток</div>
+            </td>
+            <td width=65px>
+                <div class=zakaz>Заказано</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

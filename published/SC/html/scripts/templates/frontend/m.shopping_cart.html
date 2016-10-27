@@ -1,0 +1,134 @@
+<div id="blck-content">
+	{*<div>*}
+		<div id="cart_page_title">
+			<h1>{$CurrentDivision.name|translate}</h1>
+		</div>
+		<div>
+			<a id="my_closeLink" href='{"?ukey=home"|set_query_html}' target="_parent"
+			   onclick="window.history.back()">
+				{lbl_goto_shopping}
+			</a>
+		</div>
+	{if $cart_content}
+		<div id="cart_clear">
+			<a href='{"clear_cart=yes"|set_query}'
+			   onclick="confirm('{"cart_clear_cart"|translate}?')">{"cart_clear_cart"|translate}</a>
+		</div>
+	{/if}
+	{*</div>*}
+	
+	<div>
+		{$MessageBlock}
+		
+		{* shopping cart *}
+		{if $cart_content}
+		{if $cart_amount lt $smarty.const.CONF_MINIMAL_ORDER_AMOUNT & $cart_error_show eq 1 & !$MessageBlock}
+			<div class='error_block'><span
+					  style="font-size: 150%; color: red;">{"cart_min_order_amount_not_reached"|translate} {$cart_min}</span>
+			</div>
+		{/if}
+		<script>
+			var aID = [];
+			var bID = [];
+			var mID = [];
+		</script>
+		<form action="{''|set_query_html}" name="ShoppingCartForm" method="post" target="_self">
+			<input type="hidden" name="update" value="1"/>
+			<input type="hidden" name="shopping_cart" value="1"/>
+				<div class=cart_wrapper>
+				{assign var="ProductsNum" value=0}
+				{assign var="num" value=1}
+				
+				{section loop=$cart_content name=i}
+					{assign var=_prdid value=$cart_content[i].id}
+					<div id='{$_prdid}' class=cart_item>
+                        <div class=cart_item_name>
+							<a href='{"?ukey=product&product_slug=`$cart_content[i].slug`"|set_query_html}'>
+                                {$cart_content[i].name}
+                            </a>
+                            {if $cart_content[i].productID|is_new_product>0}
+                                &nbsp;&nbsp;
+                                <span style='color: white; background-color: red;'>&nbsp;Новинка!&nbsp;</span>
+                            {/if}
+                        </div>
+						<div class="cart_item_img cart_left">
+                            {if $cart_content[i].thumbnail_url}
+                                <a href='{"?ukey=product&product_slug=`$cart_content[i].slug`"|set_query_html}'>
+								    <img class='preview' data-pid='{$cart_content[i].picture_url|escape:'html'}'
+									 src="{$cart_content[i].thumbnail_url|escape:'html'}">
+                                </a>
+							{else}&nbsp;{/if}
+						</div>
+                        <div class=cart_right>
+                            <div>
+        
+                                {assign var="ProductsNum" value=$ProductsNum+$cart_content[i].quantity}
+        
+                                <input type="hidden" id='price_{$_prdid}' value='{$cart_content[i].PriceX}'>
+        
+                                <div class=counter>
+                                    <a class='count-control control-down' href="javascript:void(0);" onclick="CountUP('{$_prdid}')">+</a>
+                                    <input id='count_{$_prdid}' class="cart_product_quantity digit" type="text"
+                                           maxlength="3"
+                                           name="count_{$_prdid}" value="{$cart_content[i].quantity}" size="3"
+                                           onKeyup="Reprise()"/>
+                                    <a class='count-control control-down' href="javascript:void(0);"  onClick="CountDOWN('{$_prdid}')">-</a>
+                                </div>
+                                
+                                <div id="min_{$_prdid}" class="error_block{if !$cart_content[i].min_order_amount} display_none{/if}">
+                                        <span class="error_message">
+                                            мин. {$cart_content[i].min_order}&nbsp;{"str_items"|translate}
+                                        </span>
+                                </div>
+    
+                            </div>
+                            <div>{$cart_content[i].costUC}</div>
+                            <div>{$cart_content[i].ostatok}&nbsp;шт.</div>
+                            <div>
+                                <a href='{"remove=`$_prdid`"|set_query_html}' title='{"btn_delete"|transcape}' onClick="CountDOWN('{$_prdid}', true);return false">
+                                    <img src="{$smarty.const.URL_IMAGES}/remove.gif" alt='{"btn_delete"|transcape}'>
+                                </a>
+                            </div>
+                        </div>
+                        <div class=clear></div>
+                        <div class=cart_item_total>
+                            <div class="cart_item_bonus cart_left">
+                                Бонус: 
+                                <span id="bonus_{$_prdid}">
+                                    {$cart_content[i].Bonus}&nbsp;бал.
+                                </span>
+                            </div>
+                            <div class="cart_item_sum cart_right">
+                                Стоимость: 
+                                <span id="sum_{$_prdid}">
+                                    {$cart_content[i].cost}
+                                </span>
+                            </div>
+                        </div>
+
+					</div>
+					<script>
+						aID[{$smarty.section.i.index}] = '{$_prdid}';
+						bID[{$_prdid}] ={$cart_content[i].BonusX};
+						mID[{$_prdid}] ={$cart_content[i].min_order};
+					</script>
+				{/section}
+				</div>
+				<div id=cart_footer>
+					<div id=cart_total_label>
+						{if $smarty.session.cs_may_order && $smarty.const.CONF_SHOW_ADD2CART eq 1}
+							<input type='hidden' name="123" id=recalculate value='123'>
+							<input type="submit" class="btn_checkout blue-button check" name="checkout"
+								   value="{"str_checkout"|translate}" id="btn-checkout" tabindex="1005">
+						{/if}
+					</div>
+					<div id=totals>{"str_total"|translate}:</div>
+					<div id=bonus_total>{$bonus_total}&nbsp;баллов</div>
+					<div id=cart_total>{$cart_total}</div>
+                </div>
+		</form>
+	</div>
+	{else}
+	<h3>{"cart_cart_is_empty"|translate}</h3>
+	{/if}
+</div>

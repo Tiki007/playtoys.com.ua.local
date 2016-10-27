@@ -1,0 +1,108 @@
+{strip}
+{* category view *}
+{*if $smarty.get.categoryID eq 100005}{$catalog_navigator=$catalog_navigator1}{/if*}
+<div class="product_brief_head">
+    <div id="cat_path">
+        {*<ul class="cat_path_in_productpage">*}
+        {if $selected_category.picture}
+            <div>
+                <img src="{$smarty.const.URL_PRODUCTS_PICTURES}/{$selected_category.picture|escape:'url'}" 
+                     alt="{$selected_category.name|escape:'html'}" title="{$selected_category.name|escape:'html'}" />
+            </div>
+        {/if}
+            <ul id=breadcrumbs-one>
+                <li><a href="{"?"|set_query}">{"lnk_homepage"|translate}</a></li>&GreaterGreater;
+                {*{$BREADCRUMB_DELIMITER}*}
+                {section name=i loop=$product_category_path}
+                    {if $product_category_path[i].categoryID != 1}
+                        <li>
+                            <a href='{"?categoryID=`$product_category_path[i].categoryID`&category_slug=`$product_category_path[i].slug`"|set_query_html}' aria-haspopup=true>{$product_category_path[i].name|escape:'html'|default:"(no name)"}</a>
+                            {if $subcategories_to_be_shown}
+                                <ul>
+                                {section name=i loop=$subcategories_to_be_shown}
+                                    {if $subcategories_to_be_shown[i][3]}
+                                        {assign var=_sub_category_url value="?categoryID=`$subcategories_to_be_shown[i][0]`&category_slug=`$subcategories_to_be_shown[i][3]`"|set_query_html}
+                                    {else}
+                                        {assign var=_sub_category_url value="?categoryID=`$subcategories_to_be_shown[i][0]`"|set_query_html}
+                                    {/if}
+                                    <li><a href="{$_sub_category_url}" aria-haspopup=true>{$subcategories_to_be_shown[i][1]}</a></li>
+                                {/section}
+                                </ul>
+                            {/if}
+                        </li>
+                        {if !$smarty.section.i.last}
+                        {*{$BREADCRUMB_DELIMITER}*}
+                        &GreaterGreater;
+                        {/if}
+                    {/if}
+                {/section}
+            </ul>
+    <div>
+    {$selected_category.description}
+</div>
+<div>
+    <button class="blue-button addall" onclick="addAll2Cart();">Заказать все</button>
+</div>
+</div>
+{*<div id="cat_top_tree">*}
+	{*<div id="cat_info_left_block">*}
+		{* description *}
+		{*{$selected_category.description}*}
+		{**}
+	{*</div>*}
+{*</div>*}
+{if $products_to_show}
+{*{if $catalog_navigator}<p class='navigator'>{$catalog_navigator}</p>{/if}*}
+{if $catalog_navigator}<div class='simple-pagination compact-theme'>{$catalog_navigator}</div>{/if}
+<!-- Шапка таблицы -->
+{include file="product_brief_head.html"}
+</div>
+    <div class="scroll-pane1">
+        <div id=content>
+            <div class='delimiter'></div>
+            {*<table>*}
+            {section name=i1 loop=$products_to_show}
+                {*<tr>*}
+                {*<td>*}
+                {*include file="product_brief.html" product_info=$products_to_show[i1]*}
+                {*assign var=product_info value=$products_to_show[i1]*}
+                {* product brief view (from a category or search) *}
+                {if $products_to_show[i1] ne NULL}
+                    {if $products_to_show[i1].slug}
+                        {assign var=_product_url value="?ukey=product&productID=`$products_to_show[i1].productID`&product_slug=`$products_to_show[i1].slug`"|set_query_html}
+                    {else}
+                        {assign var=_product_url value="?ukey=product&productID=`$products_to_show[i1].productID`"|set_query_html}
+                    {/if}
+                    {if $widget}{assign var=_form_action_url value="&view=noframe&external=1"}{/if}
+                    {assign var=_cnt value=$products_to_show[i1].productID}
+                    <table class='cs_product_info'>
+                        <tbody>
+                            <tr>
+                                {include file="product_brief.html"}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class='delimiter'></div>
+                    {if $products_to_show[i1].ordering_available && $products_to_show[i1].Price>0 && ( $smarty.const.CONF_SHOW_ADD2CART eq 1 ) && ( $smarty.const.CONF_CHECKSTOCK==0 || $products_to_show[i1].in_stock > 0 ) }
+                    {elseif $smarty.const.CONF_SHOW_ADD2CART eq 1 && $smarty.const.CONF_CHECKSTOCK && !$products_to_show[i1].in_stock && $products_to_show[i1].ordering_available}
+                        <div class="prd_out_of_stock">{lbl_prd_out_of_stock}</div>
+                    {/if}
+                {/if}
+            {/section}
+            {*</table>*}
+            {if $catalog_navigator}<div class='simple-pagination compact-theme'>{$catalog_navigator}</div>{/if}
+        </div>
+        <div class="baron__track">
+            <div class="baron__free">
+                <div class="baron__bar"></div>
+            </div>
+        </div>
+    </div>
+    {*{if $catalog_navigator}<p class='navigator bottom-nav'>{$catalog_navigator}</p>{/if}*}
+{/if}
+{assign var="maxEl" value="0"}
+{section name=u loop=$products_to_show}{assign var="maxEl" value="`$maxEl+1`"}{/section}
+{if $maxEl eq 0}
+  <br><br><!-- В ДАННОЙ КАТЕГОРИИ ТОВАРА НЕТ.-->
+{/if}
+{/strip}
